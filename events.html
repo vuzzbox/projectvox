@@ -1,0 +1,48 @@
+<html>
+<head>
+    <title>Long Polling - Display Events</title>
+    <script type='text/javascript' src='http://code.jquery.com/jquery-1.7.1.min.js'></script>
+    <script type='text/javascript'>
+		var toggleState = 'off';
+		
+        $(document).ready(function() {
+			$('#toggle').click(function() {
+				  if ($(this).attr("value")=='turn it on') {
+					$(this).val('turn it off');
+					toggleState = 'on';
+					getData();
+				} else {
+					$(this).val('turn it on');
+					toggleState = 'off';
+				}
+			});			
+        });
+
+        function getData() {
+            $.ajax({
+                type: "POST",
+                url: "/projectvox/comet/server.php",
+                async: true,
+                timeout: 50000,
+                data: "get=true&session_id=xyz12345",
+                success: function(data) {
+					if (data != "empty") {
+						$("#info").html(data);
+					} else {
+						$("#info").append('&#8226;');
+					}
+					if (toggleState=='on') {
+						setTimeout("getData()", 1000);
+					}
+                }
+            });	
+        }
+    </script>
+</head>
+<body>
+	<h1>Events</h1>
+    <div id='info'>Enter a session and turn it on to view commands being sent to the server.</div>
+	<div><input type='text' id='session_id' name='session_id' /></div>
+	<div><input type='button' id='toggle' value='turn it on' /></div>
+</body>
+</html>

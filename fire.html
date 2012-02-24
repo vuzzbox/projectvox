@@ -1,0 +1,30 @@
+<html>
+<head>
+    <title>Long Polling - Set Events</title>
+    <script type='text/javascript' src='http://code.jquery.com/jquery-1.7.1.min.js'></script>
+    <script type='text/javascript'>
+        $(document).ready(function() {
+			$('#fire').click(function() {
+				setData();
+			});			
+        });
+
+        function setData() {
+			$.post( '/projectvox/comet/datasource.php', { session_id: 'xyz12345', command: $("#command").val() },
+			  function( data ) {
+				  $( "#info" ).empty().append( data );
+			  }
+			);
+		}
+    </script>	
+</head>
+<body>
+	<h1>Set an Event</h1>
+    <h3>Click the button to send a random number to the server.</h3>
+	<div><input type='text' id='command' width='200' /></div>
+	<div><input type='button' id='fire' value='send' /></div>
+	
+	<div id='info'></div>	
+</body>
+</html>	
+	
